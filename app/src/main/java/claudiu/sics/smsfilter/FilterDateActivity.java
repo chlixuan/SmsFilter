@@ -1,5 +1,6 @@
 package claudiu.sics.smsfilter;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -51,6 +52,8 @@ public class FilterDateActivity extends AppCompatActivity {
     }
 
     public void pickFrom(View view) {
+        /*
+        陈礼轩 2020-6-6 生成签名APK 失败，所以不用匿名类
         DialogFragment newFragment = new DatePickerFragment() {
             @Override
             public void onDismiss(DialogInterface dialog) {
@@ -59,9 +62,20 @@ public class FilterDateActivity extends AppCompatActivity {
             }
         };
         newFragment.show(getFragmentManager(), Resources.DATE_PICKER_FROM);
+        */
+
+        MyDatePickerFragment newFragment =new MyDatePickerFragment();
+        newFragment.setFilter(filter.getStartTime(),((EditText) findViewById(R.id.fromDateText)));
+
+        newFragment.show(getFragmentManager(), Resources.DATE_PICKER_FROM);
     }
 
+
+
     public void pickTo(View view) {
+
+        /*
+        陈礼轩 2020-6-6 生成签名APK 失败，所以不用匿名类
         DialogFragment newFragment = new DatePickerFragment() {
             @Override
             public void onDismiss(DialogInterface dialog) {
@@ -69,6 +83,14 @@ public class FilterDateActivity extends AppCompatActivity {
                 ((EditText) findViewById(R.id.toDateText)).setText(filter.getEndTime());
             }
         };
+
+        newFragment.setCancelable(true);
+        newFragment.show(getFragmentManager(), Resources.DATE_PICKER_TO);
+
+        */
+
+        MyDatePickerFragment newFragment =new MyDatePickerFragment();
+        newFragment.setFilter(filter.getEndTime(),((EditText) findViewById(R.id.toDateText)));
         newFragment.setCancelable(true);
         newFragment.show(getFragmentManager(), Resources.DATE_PICKER_TO);
     }
@@ -142,5 +164,25 @@ public class FilterDateActivity extends AppCompatActivity {
                 filter.setEndTime(DateFormat.format(Resources.FORMAT_YYYY_MM_DD, calendar.getTime()).toString());
             }
         }
+    }
+}
+
+
+@SuppressLint("ValidFragment")
+class MyDatePickerFragment extends FilterDateActivity.DatePickerFragment {
+
+    private String stringTime;
+    private EditText editText;
+
+    public void setFilter( String stringTime, EditText editText){
+        this.stringTime=stringTime;
+        this.editText=editText;
+    }
+
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        super.onDismiss(dialog);
+        this.editText.setText(stringTime);
     }
 }

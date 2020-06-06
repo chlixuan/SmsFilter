@@ -1,5 +1,6 @@
 package claudiu.sics.smsfilter;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -50,6 +51,8 @@ public class FilterTimeActivity extends AppCompatActivity {
     }
 
     public void pickFrom(View view) {
+        /*
+        陈礼轩 2020-6-6 生成签名APK 失败，所以不用匿名类
         DialogFragment newFragment = new FilterTimeActivity.TimePickerFragment() {
             @Override
             public void onDismiss(DialogInterface dialog) {
@@ -58,9 +61,20 @@ public class FilterTimeActivity extends AppCompatActivity {
             }
         };
         newFragment.show(getFragmentManager(), Resources.TIME_PICKER_FROM);
+        */
+
+
+
+        MyTimePickerFragment newFragment =new MyTimePickerFragment();
+        newFragment.setFilter(filter.getStartTime(),((EditText) findViewById(R.id.fromTimeText)));
+
+        newFragment.show(getFragmentManager(), Resources.TIME_PICKER_FROM);
+
     }
 
     public void pickTo(View view) {
+         /*
+        陈礼轩 2020-6-6 生成签名APK 失败，所以不用匿名类
         DialogFragment newFragment = new FilterTimeActivity.TimePickerFragment() {
             @Override
             public void onDismiss(DialogInterface dialog) {
@@ -68,6 +82,14 @@ public class FilterTimeActivity extends AppCompatActivity {
                 ((EditText) findViewById(R.id.toTimeText)).setText(filter.getEndTime());
             }
         };
+        newFragment.setCancelable(true);
+        newFragment.show(getFragmentManager(), Resources.TIME_PICKER_TO);
+        */
+
+
+        MyTimePickerFragment newFragment =new MyTimePickerFragment();
+        newFragment.setFilter(filter.getEndTime(),((EditText) findViewById(R.id.toTimeText)));
+
         newFragment.setCancelable(true);
         newFragment.show(getFragmentManager(), Resources.TIME_PICKER_TO);
     }
@@ -134,5 +156,26 @@ public class FilterTimeActivity extends AppCompatActivity {
                 filter.setEndTime(DateFormat.format(Resources.FORMAT_HH_MM, calendar.getTime()).toString());
             }
         }
+    }
+}
+
+
+
+@SuppressLint("ValidFragment")
+class MyTimePickerFragment extends FilterTimeActivity.TimePickerFragment {
+
+    private String stringTime;
+    private EditText editText;
+
+    public void setFilter( String stringTime, EditText editText){
+        this.stringTime=stringTime;
+        this.editText=editText;
+    }
+
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        super.onDismiss(dialog);
+        this.editText.setText(stringTime);
     }
 }
